@@ -7,6 +7,9 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.linalg.distributed.RowMatrix;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by 李凌耀 on 2017/8/4.
  */
@@ -52,6 +55,12 @@ public class PCAMain {
         RowMatrix projected = mat.multiply(pc);
 
         Vector[] collectPartitions = (Vector[])projected.rows().collect();
+
+        List<Vector> data = Arrays.asList(collectPartitions);;
+
+        JavaRDD<Vector> vec = sc.parallelize(data);
+
+        vec.saveAsTextFile("savePath");
 
 
     }
